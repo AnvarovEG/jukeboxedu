@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Музыка{% endblock %}
+
+{% block content %}
+    <h4>Топ billboard</h4>
+    <ol>
+        {% for music_name in music_list %}
+            <li><a  href="#">{{ music_name }}</a></li>
+        {% endfor %}
+    </ol>
+    <hr>
+    <p> Количество: {{ music_list|length }}</p>
+    <br>
+    <a href="artists/">Исполнители</a>
+    <a href="albums/">Альбомы</a>
+    <a href="tracks/">Треки</a>
+
+
+{% endblock %}

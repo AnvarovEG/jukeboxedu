@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Исполнители{% endblock %}
+
+{% block content %}
+
+    <a href="/music/artists/">Назад</a>
+    <h3>Новый исполнитель:</h3>
+    <form method="POST" action="/music/artists/add/">
+        {% csrf_token %}
+        {{ form.name }} <br/> {{ form.name.errors }}<br/>
+        {{ form.start_year }} <br/>{{ form.start_year.errors }}<br/>
+        <input type="submit"/>
+    </form>
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Исполнители{% endblock %}
+
+{% block content %}
+    <a href="/music/">Назад</a>
+    <h2>Испольнители:</h2>
+    <ul>
+        {% for artist in artists_list %}
+            <li><strong>{{ artist.name }}</strong> ({{ artist.start_year }})</li>
+        {% endfor %}
+    </ul>
+    <hr />
+    <a href="add/">Добавить исполнителя</a>
+{% endblock %}
