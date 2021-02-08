@@ -1,10 +1,11 @@
-from django.http import HttpResponse
+from django.http import Http404
 from django.shortcuts import render, redirect
 from django.views import View
 
-from .forms import ArtistForm
+from .forms import ArtistForm, AlbumForm
 from .models import (Track,
-                     Artist)
+                     Artist,
+                     Album)
 
 
 class IndexView(View):
@@ -50,6 +51,19 @@ class ArtistsView(View):
         return render(request, 'artists/list.html', {'artists_list': artists})
 
 
+class ArtistView(View):
+
+    def get(self, request, id):
+        artist = Artist.objects.filter(id=id).first()
+
+        if not artist:
+            # После функции return будет выход и дальше код не пойдет
+            return Http404('Исполнитель не найден')
+
+        albums = artist.albums.order_by('year').all()
+        return render(request, 'artists/detail.html', {'artist': artist, 'albums': albums})
+
+
 class AddArtistView(View):
 
     def get(self, request):
@@ -57,14 +71,38 @@ class AddArtistView(View):
         return render(request, 'artists/add.html', {'form': form})
 
     def post(self, request):
-        artist_name = request.POST.get('name')
-        artist_start_year = int(request.POST.get('start_year'))
-
         form = ArtistForm(request.POST)
         if form.is_valid():
-            artist = Artist(name=artist_name,
-                            start_year=artist_start_year)
+            artist = Artist(name=form.name,
+                            start_year=form.start_year)
             artist.save()
             return redirect('/music/artists')
 
         return render(request, 'artists/add.html', {'form': form})
+
+
+class AlbumsView(View):
+
+    def get(self, request):
+        albums = Album.objects.all()
+        return render(request, 'albums/list.html', {'albums_list': albums})
+
+
+class AddAlbumView(View):
+
+    def get(self, request):
+        form = AlbumForm()
+        return render(request, 'albums/add.html', {'form': form})
+
+    def post(self, request):
+        form = AlbumForm(request.POST)
+
+        if form.is_valid():
+            artist = Artist.objects.filter(id=form.data.get('artist')).first()
+            album = Album(title=form.data.get('title'),
+                          year=form.data['year'],  # это dict поэтому либо [] либо .get()
+                          artist=artist)
+            album.save()
+            return redirect('/music/albums')
+
+        return render(request, 'albums/add.html', {'form': form})

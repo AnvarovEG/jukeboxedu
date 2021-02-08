@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Новый альбом{% endblock %}
+
+{% block content %}
+
+    <a href="/music/albums/">Назад</a>
+    <h3>Новый альбом:</h3>
+    <form method="POST" action="/music/albums/add/">
+        {% csrf_token %}
+        {{ form.title }} <br/> {{ form.title.errors }}<br/>
+        {{ form.artist }} <br/> {{ form.artist.errors }}<br/>
+        {{ form.year }} <br/>{{ form.year.errors }}<br/>
+        <input type="submit"/>
+    </form>
+
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Артист {{ artist.name }} {% endblock %}
+
+{% block content %}
+
+    <a href="/music/artists/">Назад</a>
+    <h3>Артист {{ artist.name }} </h3>
+    <ul>
+        <li><strong>Год:</strong><u>{{ artist.start_year }}</u></li>
+        <li>
+            <strong>Альбомы:</strong>
+            <ol>
+
+                {% for album in albums %}
+                    <li>{{ album.title }}&nbsp;({{ album.year }})</li>
+                {% endfor %}
+            </ol>
+        </li>
+    </ul>
+
+{% endblock %}
